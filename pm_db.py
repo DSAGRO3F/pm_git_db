@@ -21,8 +21,8 @@ st.set_page_config(page_title="Visualisation état capteurs ", layout='wide')
 session = requests.Session()
 
 # Définition base url
-base_url = 'http://localhost:5000'
-
+# base_url = 'http://localhost:5000'
+base_url = 'https://git.heroku.com/predictive-maintenance-api.git'
 
 
 # Construction requête pour récupérer dataframe df
