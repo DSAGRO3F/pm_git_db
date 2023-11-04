@@ -21,8 +21,8 @@ st.set_page_config(page_title="Visualisation état capteurs ", layout='wide')
 session = requests.Session()
 
 # Définition base url
-# base_url = 'http://localhost:5000'
-base_url = 'https://git.heroku.com/predictive-maintenance-api.git'
+#base_url = 'http://localhost:5000'
+base_url = 'https://predictive-maintenance-api-6ea7f441053d.herokuapp.com'
 
 
 # Construction requête pour récupérer dataframe df
@@ -100,7 +100,7 @@ df = pd.DataFrame.from_dict(data)
 # print('df: {}'.format(df.iloc[0:2, 2:10]))
 
 # print('type_1: {}'.format(df['DATE'].dtypes))
-df['DATE'] = pd.to_datetime(df['DATE'])
+# df['DATE'] = pd.to_datetime(df['DATE'])
 # print('type_2: {}'.format(df['DATE'].dtypes))
 
 df_date = df[['DATE']]
