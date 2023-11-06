@@ -28,7 +28,6 @@ session = requests.Session()
 # Définition base url Heroku
 base_url = 'https://predictive-maintenance-api-6ea7f441053d.herokuapp.com'
 
-
 # Construction requête pour récupérer dataframe df
 end_point_df = '/df'
 url_df = base_url + end_point_df
@@ -48,7 +47,8 @@ def get_df(session, url_df):
 data_origine = get_df(session, url_df)
 df_origine = pd.DataFrame(data_origine)
 
-
+st.info('df_origin: ')
+st.dataframe(df_origine[0:2])
 
 
 # Construction requête récupération des ID équipements.
