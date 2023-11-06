@@ -97,17 +97,14 @@ def load_sensors_data(session, url_sensors):
         traceback.print_exc()
         return {}
 
-data = load_sensors_data(session, url_sensors)
 
+data = load_sensors_data(session, url_sensors)
 #print(data)
 df = pd.DataFrame.from_dict(data)
-
-print('type_1: {}'.format(df['DATE'].dtypes))
+# print('type_1: {}'.format(df['DATE'].dtypes))
 df['DATE'] = df['DATE'].astype('str')
-
-
 df['DATE'] = pd.to_datetime(df['DATE'])
-print('type_2: {}'.format(df['DATE'].dtypes))
+# print('type_2: {}'.format(df['DATE'].dtypes))
 
 df_date = df[['DATE']]
 # df_date.style.format({"DATE": lambda t: t.strftime("%d-%m-%Y")})
@@ -184,9 +181,9 @@ with tab2:
 
             df_temp_2_roll = pd.concat([df_date, df_roll[roll_col]], axis=1)
 
-            print('type_4: {}'.format(df_temp_2['DATE'].dtypes))
+            # print('type_4: {}'.format(df_temp_2['DATE'].dtypes))
             df_temp_2['DATE'] = pd.to_datetime(df_temp_2["DATE"], format="%Y-%m-%d")
-            print('type_5: {}'.format(df_temp_2['DATE'].dtypes))
+            # print('type_5: {}'.format(df_temp_2['DATE'].dtypes))
 
             df_temp_2_roll['DATE'] = pd.to_datetime(df_temp_2_roll["DATE"], format="%Y-%m-%d")
 
