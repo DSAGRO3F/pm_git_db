@@ -45,7 +45,8 @@ def get_df(session, url_df):
         return {}
 
 data_origine = get_df(session, url_df)
-df_origine = pd.DataFrame(data_origine)
+# df_origine = pd.DataFrame(data_origine)
+df_origine = pd.read_json(data_origine)
 
 st.info('df_origin: ')
 st.dataframe(df_origine[0:2])
