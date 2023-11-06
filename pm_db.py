@@ -13,6 +13,8 @@ import matplotlib.colors as mcolors
 from matplotlib.dates import date2num
 import matplotlib.dates as mdates
 import seaborn as sns
+from datetime import datetime
+from dateutil.parser import parse
 
 # Initialisation page streamlit
 st.set_page_config(page_title="Visualisation état capteurs ", layout='wide')
@@ -20,8 +22,10 @@ st.set_page_config(page_title="Visualisation état capteurs ", layout='wide')
 # Set connection
 session = requests.Session()
 
-# Définition base url
-#base_url = 'http://localhost:5000'
+# Définition base url local
+# base_url = 'http://localhost:5000'
+
+# Définition base url Heroku
 base_url = 'https://predictive-maintenance-api-6ea7f441053d.herokuapp.com'
 
 
@@ -97,18 +101,18 @@ data = load_sensors_data(session, url_sensors)
 
 #print(data)
 df = pd.DataFrame.from_dict(data)
-# print('df: {}'.format(df.iloc[0:2, 2:10]))
 
-# print('type_1: {}'.format(df['DATE'].dtypes))
-# df['DATE'] = pd.to_datetime(df['DATE'])
-# print('type_2: {}'.format(df['DATE'].dtypes))
+print('type_1: {}'.format(df['DATE'].dtypes))
+df['DATE'] = df['DATE'].astype('str')
+
+
+df['DATE'] = pd.to_datetime(df['DATE'])
+print('type_2: {}'.format(df['DATE'].dtypes))
 
 df_date = df[['DATE']]
-df_date.style.format({"DATE": lambda t: t.strftime("%d-%m-%Y")})
+# df_date.style.format({"DATE": lambda t: t.strftime("%d-%m-%Y")})
 # print('type_3: {}'.format(df_date.dtypes))
 # print(df_date[0:2])
-
-
 
 
 # Récupération dataset X_test:
@@ -132,7 +136,6 @@ X_test = pd.DataFrame.from_dict(X_test_data)
 # print('X_Test columsn: {}'.format(X_test.columns))
 
 
-
 # 1. Exploitation data pour visualisation data capteurs
 l_sensors = ['S13', 'S15', 'S16', 'S17', 'S18', 'S19', 'S5', 'S8']
 df_sensors = df[l_sensors]
@@ -148,7 +151,6 @@ l_roll = ['roll_' + name for name in l_sensors]
 df_roll = df[l_roll]
 
 # print('df_sensors: {}'.format(df_sensors[0:2]))
-
 
 
 # Initialisation des onglets streamlit
@@ -182,13 +184,11 @@ with tab2:
 
             df_temp_2_roll = pd.concat([df_date, df_roll[roll_col]], axis=1)
 
-            # print('type_4: {}'.format(df_temp_2['DATE'].dtypes))
+            print('type_4: {}'.format(df_temp_2['DATE'].dtypes))
             df_temp_2['DATE'] = pd.to_datetime(df_temp_2["DATE"], format="%Y-%m-%d")
-            # print('type_5: {}'.format(df_temp_2['DATE'].dtypes))
+            print('type_5: {}'.format(df_temp_2['DATE'].dtypes))
 
             df_temp_2_roll['DATE'] = pd.to_datetime(df_temp_2_roll["DATE"], format="%Y-%m-%d")
-
-
 
             # Calcul val.moy., min, max
             avg_val = df_temp_2[[col]].mean(axis=0)
