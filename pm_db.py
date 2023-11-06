@@ -102,7 +102,7 @@ data = load_sensors_data(session, url_sensors)
 #print(data)
 df = pd.DataFrame.from_dict(data)
 # print('type_1: {}'.format(df['DATE'].dtypes))
-st.write(df.columns)
+st.dataframe(df[0:2])
 
 # df['DATE'] = df['DATE'].astype(str)
 # df['DATE'] = pd.to_datetime(df['DATE'])
