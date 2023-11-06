@@ -26,10 +26,10 @@ session = requests.Session()
 # base_url = 'http://localhost:5000'
 
 # Définition base url Heroku
-base_url = 'https://predictive-maintenance-api-6ea7f441053d.herokuapp.com'
+base_url = 'https://predictive-maintenance-api-6ea7f441053d.herokuapp.com/'
 
 # Construction requête pour récupérer dataframe df
-end_point_df = '/df'
+end_point_df = 'df'
 url_df = base_url + end_point_df
 
 def get_df(session, url_df):
@@ -45,15 +45,14 @@ def get_df(session, url_df):
         return {}
 
 data_origine = get_df(session, url_df)
-# df_origine = pd.DataFrame(data_origine)
-df_origine = pd.read_json(data_origine)
+df_origine = pd.DataFrame(data_origine)
 
 st.info('df_origin: ')
 st.dataframe(df_origine[0:2])
 
 
 # Construction requête récupération des ID équipements.
-end_point_id = '/id'
+end_point_id = 'id'
 url_id = base_url + end_point_id
 # print(url_id)
 
@@ -84,7 +83,7 @@ make_choice = st.sidebar.selectbox('Sélection Id équipement:', liste_id)
 
 # Construction fonction pour récupérer les données relatives à un Id équipement
 id = str(make_choice)
-end_point_sensors = '/sensors_data/' + id
+end_point_sensors = 'sensors_data/' + id
 url_sensors = base_url + end_point_sensors
 
 def load_sensors_data(session, url_sensors):
