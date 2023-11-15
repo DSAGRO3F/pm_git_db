@@ -104,7 +104,7 @@ df = pd.DataFrame.from_dict(data)
 # print('type_1: {}'.format(df['DATE'].dtypes))
 # st.dataframe(df[0:2])
 
-df['DATE'] = df['DATE'].astype(str)
+df['DATE'] = df['DATE'].astype('str')
 df['DATE'] = pd.to_datetime(df['DATE'])
 # print('type_2: {}'.format(df['DATE'].dtypes))
 
