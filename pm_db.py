@@ -101,17 +101,27 @@ def load_sensors_data(session, url_sensors):
 data = load_sensors_data(session, url_sensors)
 #print(data)
 df = pd.DataFrame.from_dict(data)
-# print('type_1: {}'.format(df['DATE'].dtypes))
-# st.dataframe(df[0:2])
+print('----------')
+print('df columns: {}'.format(df.columns))
+
+print('type_1: {}'.format(df['DATE'].dtypes))
+print("df['DATE'][0:2]_1: {}".format(df['DATE'][0:2]))
+print('-----------')
+
 
 df['DATE'] = df['DATE'].astype('str')
 df['DATE'] = pd.to_datetime(df['DATE'])
-# print('type_2: {}'.format(df['DATE'].dtypes))
+print('type_2: {}'.format(df['DATE'].dtypes))
+print("df['DATE'][0:2]_2: {}".format(df['DATE'][0:2]))
+print('-----------')
+
 
 df_date = df[['DATE']]
 # df_date.style.format({"DATE": lambda t: t.strftime("%d-%m-%Y")})
-# print('type_3: {}'.format(df_date.dtypes))
-# print(df_date[0:2])
+print('type_3: {}'.format(df_date.dtypes))
+print("df_date[0:2]_3: {}".format(df_date[0:2]))
+print('-----------')
+
 
 
 # Récupération dataset X_test:
@@ -133,17 +143,31 @@ def get_X_test(session, url_X_test):
 
 X_test_data = get_X_test(session, url_X_test)
 X_test = pd.DataFrame.from_dict(X_test_data)
-# print('----------')
-# print('X_Test columns: {}'.format(X_test.columns))
-# print('----------')
-# print("X_test['DATE].dtypes: {}".format(X_test['DATE'].dtypes))
-# print('----------')
-# print("X_test['DATE][0:3]: {}".format(X_test['DATE'][0:3]))
+print('----------')
+print('X_Test columns: {}'.format(X_test.columns))
+print('----------')
+print("X_test['DATE].dtypes_1: {}".format(X_test['DATE'].dtypes))
+print('----------')
+print("X_test['DATE][0:3]_1: {}".format(X_test['DATE'][0:3]))
+print('----------')
+
+
+X_test['DATE'] = X_test['DATE'].astype('str')
+X_test['DATE'] = pd.to_datetime(X_test['DATE'])
+print('----------')
+print("X_test['DATE].dtypes_2: {}".format(X_test['DATE'].dtypes))
+print('----------')
+print("X_test['DATE][0:3]_2: {}".format(X_test['DATE'][0:3]))
 
 
 # 1. Exploitation data pour visualisation data capteurs
 l_sensors = ['S13', 'S15', 'S16', 'S17', 'S18', 'S19', 'S5', 'S8']
 df_sensors = df[l_sensors]
+df_sensors['DATE'] = df['DATE'].tolist()
+print('----------')
+print('df_sensors.columns: {}'.format(df_sensors.columns))
+print('df_sensors[0:2]: {}'.format(df_sensors['DATE'][0:2]))
+
 
 # 2. Exploitation data pour visualisation data peak values
 l_peak = [(name + '_peak') for name in l_sensors]
@@ -178,40 +202,43 @@ with tab2:
         n_cols = len(l_sensors)//n_rows
         fig, axes = plt.subplots(n_rows, n_cols, figsize=(8,10))
         plt.tight_layout(pad=4.0)
-        cols = df_sensors.columns
-        roll_cols = df_roll.columns
+        cols = l_sensors
+        roll_cols = l_roll
 
         for i, ax in enumerate(axes.flatten()):
             col = cols[i]
             roll_col = roll_cols[i]
-            # print('col: {}'.format(col))
-            df_temp_2 = pd.concat([df_date, df_sensors[col]], axis=1)
+            print('col: {}'.format(col))
+            pd_serie = df_sensors[col]
+            df_temp = pd.concat([df_sensors['DATE'], pd_serie], axis=1)
+            print("df_temp: {}".format(df_temp[0:2]))
 
-            df_temp_2_roll = pd.concat([df_date, df_roll[roll_col]], axis=1)
+            pd_serie_roll = df_roll[roll_col]
+            df_temp_roll = pd.concat([df_sensors['DATE'], pd_serie_roll], axis=1)
 
             # print('type_4: {}'.format(df_temp_2['DATE'].dtypes))
-            df_temp_2['DATE'] = pd.to_datetime(df_temp_2["DATE"], format="%Y-%m-%d")
+            # df_temp_2['DATE'] = pd.to_datetime(df_temp_2["DATE"], format="%Y-%m-%d")
             # print('type_5: {}'.format(df_temp_2['DATE'].dtypes))
 
-            df_temp_2_roll['DATE'] = pd.to_datetime(df_temp_2_roll["DATE"], format="%Y-%m-%d")
+            # df_temp_2_roll['DATE'] = pd.to_datetime(df_temp_2_roll["DATE"], format="%Y-%m-%d")
 
             # Calcul val.moy., min, max
-            avg_val = df_temp_2[[col]].mean(axis=0)
+            avg_val = df_temp[col].mean(axis=0)
             # print('avg_val: {}'.format(avg_val))
-            min_val = df_temp_2[[col]].min(axis=0)
-            max_val = df_temp_2[[col]].max(axis=0)
+            min_val = df_temp[col].min(axis=0)
+            max_val = df_temp[col].max(axis=0)
 
             # Définition du segment des dates sur axe des 'x'
-            x_avg_seg = [date2num(df_temp_2['DATE'][0]), date2num(df_temp_2['DATE'][len(df_temp_2) - 1])]
+            x_avg_seg = [date2num(df_temp['DATE'][0]), date2num(df_temp['DATE'][len(pd_serie) - 1])]
             # print('x_avg_seg_0: {}'.format(date2num(df_temp['DATE'][0])))
 
             # Plot constantes + data sensors
-            df_temp_2.plot.line(x='DATE', y=col, ax=ax)
+            df_temp.plot.line(x='DATE', y=col, ax=ax)
 
             line_1 = ax.hlines(y=avg_val, xmin=x_avg_seg[0], xmax=x_avg_seg[1], color='r', linestyle='dashed')
             line_2 = ax.hlines(y=min_val, xmin=x_avg_seg[0], xmax=x_avg_seg[1], color='g', linestyle='dashed')
             line_3 = ax.hlines(y=max_val, xmin=x_avg_seg[0], xmax=x_avg_seg[1], color='b', linestyle='-.')
-            line_4 = df_temp_2_roll.plot.line(x='DATE', y=roll_col, ax=ax, color='yellow', linestyle='dashed')
+            line_4 = df_temp_roll.plot.line(x='DATE', y=roll_col, ax=ax, color='yellow', linestyle='dashed')
 
             ax.legend([line_1, line_2, line_3, line_4],['avg', 'min', 'max', 'rolling'], fontsize=4)
             ax.set_title(col, fontsize=6)
@@ -231,16 +258,14 @@ with tab2:
         n_cols = len(l_peak)//n_rows
         fig, axes = plt.subplots(n_rows, n_cols, figsize=(6,8))
         plt.tight_layout(pad=3.0)
-        peak_cols = df_peak.columns
+        peak_cols = l_peak
 
         for i, ax in enumerate(axes.flatten()):
             peak_col = peak_cols[i]
-            # print('peak_col: {}'.format(peak_col))
-            df_temp_3 = pd.concat([df_date, df_peak[peak_col]], axis=1)
+            pd_serie_peak = df_peak[peak_col]
+            df_temp_peak = pd.concat([df_sensors['DATE'], pd_serie_peak], axis=1)
 
-            # print(df_temp_3[0:2])
-
-            line_1 = df_temp_3.plot.line(x='DATE', y=peak_col, ax=ax)
+            line_1 = df_temp_peak.plot.line(x='DATE', y=peak_col, ax=ax)
             ax.legend([line_1], ['peak_values'], fontsize=4)
             ax.set_title(peak_col, fontsize=6)
 
@@ -262,7 +287,7 @@ with tab3:
                 'prediction values are above cutoff value of 0.5. In that case maintenance activities must be handled.')
 
         fig, ax = plt.subplots(figsize=(10,4))
-        X_test['DATE'] = mdates.num2date(mdates.datestr2num(X_test['DATE']))
+        #X_test['DATE'] = mdates.num2date(mdates.datestr2num(X_test['DATE']))
         sns.scatterplot(data=X_test, x='DATE', y='y_pred', hue='y_pred_cutoff', ax=ax)
         ax.set_title('Distribution valeurs prédites')
 
