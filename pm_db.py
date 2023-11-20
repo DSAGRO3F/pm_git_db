@@ -211,11 +211,12 @@ with tab2:
             print('col: {}'.format(col))
             pd_serie = df_sensors[col]
             df_temp = pd.concat([df_sensors['DATE'], pd_serie], axis=1)
+            df_temp = df_temp.reset_index(drop=True)
             print("df_temp: {}".format(df_temp[0:2]))
 
             pd_serie_roll = df_roll[roll_col]
             df_temp_roll = pd.concat([df_sensors['DATE'], pd_serie_roll], axis=1)
-
+            df_temp_roll = df_temp_roll.reset_index(drop=True)
             # print('type_4: {}'.format(df_temp_2['DATE'].dtypes))
             # df_temp_2['DATE'] = pd.to_datetime(df_temp_2["DATE"], format="%Y-%m-%d")
             # print('type_5: {}'.format(df_temp_2['DATE'].dtypes))
